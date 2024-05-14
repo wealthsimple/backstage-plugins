@@ -1,0 +1,14 @@
+.github/workflows
+.idea
+.vscode
+.yarn
+app-config*.yaml
+audit-known-issues.json
+coverage
+dist
+dist-types
+docker-compose*.yml
+packages/*/CHANGELOG.md
+packages/docs-cli/templates/
+site
+tmp

@@ -1,0 +1,12 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-plugins
+  description: Open source plugins for Backstage
+  tags:
+    - javascript
+    - node
+spec:
+  type: library
+  lifecycle: experimental
