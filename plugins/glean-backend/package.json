@@ -27,7 +27,7 @@
     "@backstage/catalog-model": "^1.4.5",
     "@backstage/config": "^1.2.0",
     "@backstage/core-plugin-api": "^1.9.2",
-    "@backstage/plugin-techdocs-backend": "^1.10.4",
+    "@backstage/plugin-techdocs-backend": "^1.10.13",
     "@types/express": "*",
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.8",
