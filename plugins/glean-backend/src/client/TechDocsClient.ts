@@ -92,67 +92,51 @@ export class TechDocsClient {
   }
 
   async getTechDocsMetadata(entity: Entity): Promise<TechDocsMetadata> {
-    return await new Promise<TechDocsMetadata>(async (resolve, reject) => {
-      try {
-        const { token } = await this.auth.getPluginRequestToken({
-          onBehalfOf: await this.auth.getOwnServiceCredentials(),
-          targetPluginId: 'techdocs',
-        });
-
-        const url = await this.getTechDocsMetadataUrl(
-          this.getEntityUri(entity),
-        );
-        this.logger.debug(`getTechDocsMetadata fetch URL ${url}`);
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          ...this.agent,
-        });
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        resolve(response.json());
-      } catch (err) {
-        if (err instanceof Error) {
-          reject(new Error(err.message));
-        }
-      }
+    const { token } = await this.auth.getPluginRequestToken({
+      onBehalfOf: await this.auth.getOwnServiceCredentials(),
+      targetPluginId: 'techdocs',
     });
+
+    const url = await this.getTechDocsMetadataUrl(
+      this.getEntityUri(entity),
+    );
+    this.logger.debug(`getTechDocsMetadata fetch URL ${url}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      ...this.agent,
+    });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.json();
   }
 
   async getTechDocsStaticFile(entity: Entity, filePath: string) {
-    return await new Promise<string>(async (resolve, reject) => {
-      try {
-        const { token } = await this.auth.getPluginRequestToken({
-          onBehalfOf: await this.auth.getOwnServiceCredentials(),
-          targetPluginId: 'techdocs',
-        });
-
-        const url = await this.getTechDocsStaticUrl(
-          `${this.getEntityUri(entity)}/${filePath}`,
-        );
-        this.logger.debug(`getTechDocsStaticFile fetch URL ${url}`);
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            Accept: 'text/plain',
-            Authorization: `Bearer ${token}`,
-          },
-          ...this.agent,
-        });
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        resolve(response.text());
-      } catch (err) {
-        if (err instanceof Error) {
-          reject(new Error(err.message));
-        }
-      }
+    const { token } = await this.auth.getPluginRequestToken({
+      onBehalfOf: await this.auth.getOwnServiceCredentials(),
+      targetPluginId: 'techdocs',
     });
+
+    const url = await this.getTechDocsStaticUrl(
+      `${this.getEntityUri(entity)}/${filePath}`,
+    );
+    this.logger.debug(`getTechDocsStaticFile fetch URL ${url}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Accept: 'text/plain',
+        Authorization: `Bearer ${token}`,
+      },
+      ...this.agent,
+    });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.text();
   }
 
   parseUpdatedAt(rawHtml: string): Date {

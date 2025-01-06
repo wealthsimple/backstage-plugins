@@ -111,42 +111,30 @@ export class GleanIndexClient {
     isLastPage: boolean,
     uploadId: string,
   ): Promise<string> {
-    return await new Promise<string>(async (resolve, reject) => {
-      try {
-        const apiIndexUrl = this.config.getString('glean.apiIndexUrl');
-        const response = await fetch(apiIndexUrl, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.config.getString('glean.token')}`,
-          },
-          body: JSON.stringify({
-            uploadId,
-            isFirstPage,
-            isLastPage,
-            forceRestartUpload: isFirstPage,
-            datasource: this.config.getString('glean.datasource'),
-            documents,
-          }),
-        });
-        if (!response.ok) {
-          reject(
-            new Error(
-              `POST ${apiIndexUrl} status: ${
-                response.status
-              }, body: ${await response.text()}`,
-            ),
-          );
-        }
-        resolve(response.statusText);
-      } catch (err) {
-        if (err instanceof Error) {
-          this.logger.error(err.message);
-          reject(new Error(err.message));
-        }
-      }
+    const apiIndexUrl = this.config.getString('glean.apiIndexUrl');
+    const response = await fetch(apiIndexUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.config.getString('glean.token')}`,
+      },
+      body: JSON.stringify({
+        uploadId,
+        isFirstPage,
+        isLastPage,
+        forceRestartUpload: isFirstPage,
+        datasource: this.config.getString('glean.datasource'),
+        documents,
+      }),
     });
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(
+        `POST ${apiIndexUrl} status: ${response.status}, body: ${body}`,
+      );
+    }
+    return response.statusText;
   }
 
   async batchIndexDocuments(
